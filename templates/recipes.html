@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block content %}
+<ul class="collapsible">
+    {% for r in recipes %}
+    <li href="#" class="collection-item avatar">
+        <img src="../static/images/{{ r.strength|lower() }}.svg" title="Strength: {{r.strength}}" class="strength">
+        <span class="title">{% for str in r.name.split(" ") %}{{ str.capitalize() }} {% endfor %}</span>
+      <p><span class="desc">{{ r.desc|truncate(100) }}</span><br>
+         Base: {{ r.base }}<br>
+         Difficulty: {{ r.difficulty }}<br>
+         Good for: {% for occ in r.occasions %}{{ occ }}{% if r.occasions.index(occ) < r.occasions|length-1 %}, {% endif %}{% endfor %}
+      </p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

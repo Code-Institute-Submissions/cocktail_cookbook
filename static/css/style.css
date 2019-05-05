@@ -9,3 +9,30 @@
 .task_header {
     margin-top: 5px;
 }
+
+img {
+    max-width: 80px;
+}
+
+.strength {
+    position: absolute;
+    width: 80px;
+    height: 90px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.collection .collection-item.avatar {
+    padding-left: 105px;
+}
+
+.collection .collection-item.avatar .title {
+    font-weight: 700;
+    font-size: large;
+}
+
+.desc {
+    font-size: medium;
+}
