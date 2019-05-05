@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 <h3><img src="../static/images/{{ recipe.strength|lower() }}.svg" title="Strength: {{recipe.strength}}" class="strength-recipe"> {% for str in recipe.name.split(" ") %}{{ str.capitalize() }} {% endfor %}</h3>
-<a href="{{ url_for('update_recipe', recipe_id=recipe._id) }}" class="btn waves-effect waves-light" name="action">Edit Recipe
+<a href="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" class="btn waves-effect waves-light" name="action">Edit Recipe
     <i class="material-icons right">edit</i>
 </a>
 <a href="{{ url_for('delete_recipe', recipe_id=recipe._id) }}" class="btn waves-effect waves-light" name="action">Delete Recipe
@@ -8,16 +8,23 @@
 </a>
 
 <div class="collection-item avatar">
-    <p><span class="desc">{{ recipe.desc }}</span><br> Base: {{ recipe.base }}<br> Difficulty: {{ recipe.difficulty }}<br> Good for: {% for occ in recipe.occasions %}{{ occ }}{% if recipe.occasions.index(occ)
-        < recipe.occasions|length-1 %}, {% endif %}{% endfor %} </p>
+    <p><span class="desc">{{ recipe.desc }}</span><br> Base: {{ recipe.base }}<br> Difficulty: {{ recipe.difficulty }}<br> Good for: {% for occ in recipe.occasions %}{{ occ }}{% if recipe.occasions.index(occ) < recipe.occasions|length-1 %}, {% endif %}{% endfor %} </p>
             <h4>Ingredients:</h4>
-            <ul class="ingredients">
-                {% for i in recipe.ingredients %}
-                <li class="ingredient">{{ i }}</li>
+            <ul class="u-list">
+                {% for i in recipe.ingredients.split('\r\n') %}
+                <li class="list-item">{{ i }}</li>
                 {% endfor %}
             </ul>
             <hr>
             <h4>Recipe</h4>
-            <p>{{ recipe.recipe.split('\n') }}</p>
+            <ul>
+                {% for i in recipe.recipe.split('\r\n') %}
+                    {% if i == "" %}
+                    <li>&nbsp;</li>
+                    {% else %}
+                    <li>{{ i }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
 </div>
 {% endblock %}

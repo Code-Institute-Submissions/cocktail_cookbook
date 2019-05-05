@@ -41,14 +41,13 @@ def update_recipe(recipe_id):
     recipes = mongo.db.recipes
     recipes.update({'_id': ObjectId(recipe_id)},
     {
-        'name':request.form.get('recipe_name'),
+        'name':request.form.get('name'),
         'desc':request.form.get('desc'),
         'difficulty': request.form.get('difficulty'),
         'strength': request.form.get('strength'),
         'recipe': request.form.get('recipe'),
         'ingredients': request.form.get('ingredients'),
         'occasions ': request.form.get('occasions'),
-        'author': request.form.get('author'),
         'base':request.form.get('base')
     })
     return redirect(url_for('get_recipes'))
