@@ -9,22 +9,22 @@
 
 <div class="collection-item avatar">
     <p><span class="desc">{{ recipe.desc }}</span><br> Base: {{ recipe.base }}<br> Difficulty: {{ recipe.difficulty }}<br> Good for: {% for occ in recipe.occasions %}{{ occ }}{% if recipe.occasions.index(occ) < recipe.occasions|length-1 %}, {% endif %}{% endfor %} </p>
-            <h4>Ingredients:</h4>
-            <ul class="u-list">
-                {% for i in recipe.ingredients.split('\r\n') %}
-                <li class="list-item">{{ i }}</li>
-                {% endfor %}
-            </ul>
-            <hr>
-            <h4>Recipe</h4>
-            <ul>
-                {% for i in recipe.recipe.split('\r\n') %}
-                    {% if i == "" %}
-                    <li>&nbsp;</li>
-                    {% else %}
-                    <li>{{ i }}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+    <h4>Ingredients:</h4>
+    <ul class="u-list">
+        {% for i in recipe.ingredients.split('\r\n') %}
+        <li class="list-item">{{ i }}</li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <h4>Recipe</h4>
+    <ul>
+        {% for i in recipe.recipe.split('\r\n') %}
+            {% if i == "" %}
+            <li>&nbsp;</li>
+            {% else %}
+            <li>{{ i }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

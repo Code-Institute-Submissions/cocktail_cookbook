@@ -39,6 +39,19 @@
             $('.collapsible').collapsible();
             $('select').formSelect();
             $('.sidenav').sidenav();
+            var mSelect = function() {
+                var options = $('.multiple-select-dropdown>.selected');
+                var occasions = [];
+                options.each(function() {
+                    occasions.push(this.textContent);
+                });
+                $('#occasions')[0].value = occasions;
+                console.log(occasions);
+            };
+            mSelect();
+            $('.multiple-select-dropdown>li').click(function() {
+                mSelect();
+            });
         });
     </script>
 </body>

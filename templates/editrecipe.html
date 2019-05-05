@@ -25,7 +25,7 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                <label>Cocktail Strength</label>
+                <label for="strength">Cocktail Strength</label>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix">subject</i>
@@ -44,7 +44,7 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                <label>Cocktail Base</label>
+                <label for="base">Cocktail Base</label>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix">subject</i>
@@ -63,11 +63,12 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                <label>Cocktail Difficulty</label>
+                <label for="difficulty">Cocktail Difficulty</label>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix fas fa-glass-cheers"></i>
-                <select id="occasions" name="occasions" multiple required>
+                <input type="hidden" id="occasions" name="occasions" value="{{recipe.occasions}}">
+                <select id="occasions-select" name="occasions-select" multiple required>
                     <option value="" disabled>Please select</option>
                     {% for occ in occasions %}
                         {% if occ.name in recipe.occasions %}

@@ -4,7 +4,7 @@
     <form action="{{url_for('insert_recipe')}}" method="POST" class="col s12">
         <div class="row">
             <div class="input-field col s12">
-                <i class="material-icons prefix">assignment</i>
+                <i class="material-icons prefix fas fa-cocktail"></i>
                 <input id="name" name="name" type="text" class="validate" required>
                 <label for="name">Cocktail Name</label>
             </div>
@@ -14,14 +14,14 @@
                 <label for="desc">Cocktail Summary</label>
             </div>
             <div class="input-field col s12">
-                <i class="material-icons prefix fas fa-glass-martini-alt"></i>
+                <i class="material-icons prefix">assessment</i>
                 <select id="strength" name="strength" required>
                     <option value="" disabled selected>How strong is the cocktail?</option>
                     {% for str in strengths %}
                     <option value="{{ str.name }}">{{ str.name }} ({{ str.desc }})</option>
                     {% endfor %}
                 </select>
-                <label>Cocktail Strength</label>
+                <label for="strength">Cocktail Strength</label>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix">subject</i>
@@ -36,7 +36,7 @@
                     <option value="{{ b.name }}">{{ b.name }}</option>
                     {% endfor %}
                 </select>
-                <label>Cocktail Base</label>
+                <label for="base">Cocktail Base</label>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix">subject</i>
@@ -51,14 +51,15 @@
                     <option value="{{ d.name }}">{{ d.name }}</option>
                     {% endfor %}
                 </select>
-                <label>Cocktail Difficulty</label>
+                <label for="difficulty">Cocktail Difficulty</label>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix">people</i>
-                <select id="occasions" name="occasions" multiple required>
+                <input type="hidden" id="occasions" name="occasions">
+                <select id="occasions-select" name="occasions-select" multiple required>
                     <option value="" disabled>Please select</option>
                     {% for occ in occasions %}
-                    <option value="{{occ.name}}">{{occ.name}}</option>
+                    <option class="occasion" value="{{occ.name}}">{{occ.name}}</option>
                     {% endfor %}
                 </select>
                 <label for="occasions">Suitable Occasions</label>
