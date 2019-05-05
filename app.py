@@ -14,7 +14,13 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/get_recipes')
 def get_recipes():
-    return render_template('recipes.html',recipes=mongo.db.recipes.find())
+    return render_template(
+        'recipes.html',
+        recipes=mongo.db.recipes.find(),
+        bases=mongo.db.bases.find(),
+        strengths=mongo.db.strengths.find(),
+        difficulty=mongo.db.difficulty.find(),
+        occasions=mongo.db.occasions.find())
 
 @app.route('/add_recipe')
 def add_recipe():
@@ -55,6 +61,8 @@ def view_recipe(recipe_id):
 @app.route('/update_recipe/<recipe_id>', methods=['POST'])
 def update_recipe(recipe_id):
     recipes = mongo.db.recipes
+    the_recipe = mongo.db.recipes.find_one({"_id":ObjectId(recipe_id)})
+    author = the_recipe['author']
     recipes.update({'_id': ObjectId(recipe_id)},
     {
         'name':request.form.get('name'),
@@ -64,7 +72,8 @@ def update_recipe(recipe_id):
         'recipe': request.form.get('recipe'),
         'ingredients': request.form.get('ingredients'),
         'occasions': request.form.get('occasions').split(','),
-        'base':request.form.get('base')
+        'base':request.form.get('base'),
+        'author':author
     })
     return redirect(url_for('get_recipes'))
 
@@ -72,6 +81,26 @@ def update_recipe(recipe_id):
 def delete_recipe(recipe_id):
     mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
     return redirect(url_for('get_recipes'))
+
+@app.route('/filter_recipes',methods=['POST'])
+def filter_recipes():
+    d=request.form.to_dict()
+    if d != {}:
+        if d['base'] == '':
+            del d['base']
+        if d['difficulty'] == '':
+            del d['difficulty']
+        if d['strength'] == '':
+            del d['strength']
+        if d['occasions'] == '':
+            del d['occasions']
+    return render_template(
+        'filtersortrecipes.html',
+        recipes=mongo.db.recipes.find(d),
+        bases=mongo.db.bases.find(),
+        strengths=mongo.db.strengths.find(),
+        difficulty=mongo.db.difficulty.find(),
+        occasions=mongo.db.occasions.find())
 
 
 if __name__ == '__main__':
