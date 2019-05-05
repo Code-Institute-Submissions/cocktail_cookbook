@@ -31,6 +31,11 @@ def edit_recipe(recipe_id):
     the_recipe = mongo.db.recipes.find_one({"_id":ObjectId(recipe_id)})
     return render_template('editrecipe.html',recipe=the_recipe,strengths=mongo.db.strengths.find(),occasions=mongo.db.occasions.find(),bases=mongo.db.bases.find(),difficulty=mongo.db.difficulty.find())
 
+@app.route('/view_recipe/<recipe_id>')
+def view_recipe(recipe_id):
+    the_recipe = mongo.db.recipes.find_one({"_id":ObjectId(recipe_id)})
+    return render_template('viewrecipe.html',recipe=the_recipe)
+
 @app.route('/update_recipe/<recipe_id>', methods=['POST'])
 def update_recipe(recipe_id):
     recipes = mongo.db.recipes

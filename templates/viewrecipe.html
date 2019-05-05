@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block content %}
+<h3><img src="../static/images/{{ recipe.strength|lower() }}.svg" title="Strength: {{recipe.strength}}" class="strength-recipe"> {% for str in recipe.name.split(" ") %}{{ str.capitalize() }} {% endfor %}</h3>
+<a href="{{ url_for('update_recipe', recipe_id=recipe._id) }}" class="btn waves-effect waves-light" name="action">Edit Recipe
+    <i class="material-icons right">edit</i>
+</a>
+<a href="{{ url_for('delete_recipe', recipe_id=recipe._id) }}" class="btn waves-effect waves-light" name="action">Delete Recipe
+    <i class="material-icons right">delete</i>
+</a>
+
+<div class="collection-item avatar">
+    <p><span class="desc">{{ recipe.desc }}</span><br> Base: {{ recipe.base }}<br> Difficulty: {{ recipe.difficulty }}<br> Good for: {% for occ in recipe.occasions %}{{ occ }}{% if recipe.occasions.index(occ)
+        < recipe.occasions|length-1 %}, {% endif %}{% endfor %} </p>
+            <h4>Ingredients:</h4>
+            <ul class="ingredients">
+                {% for i in recipe.ingredients %}
+                <li class="ingredient">{{ i }}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+            <h4>Recipe</h4>
+            <p>{{ recipe.recipe.split('\n') }}</p>
+</div>
+{% endblock %}

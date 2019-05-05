@@ -14,14 +14,28 @@ img {
     max-width: 80px;
 }
 
-.strength {
-    position: absolute;
-    width: 80px;
-    height: 90px;
+.strength,
+.strength-recipe {
     overflow: hidden;
     left: 15px;
     display: inline-block;
     vertical-align: middle;
+}
+
+.strength {
+    position: absolute;
+    max-width: 80px;
+    height: 100px;
+}
+
+.strength-recipe {
+    max-width: 55px;
+}
+
+.view-recipe {
+    line-height: 0.2;
+    font-size: 40px;
+    color: #353535;
 }
 
 .collection .collection-item.avatar {
@@ -35,4 +49,9 @@ img {
 
 .desc {
     font-size: medium;
+}
+
+.ingredients>.ingredient {
+    list-style-type: disc;
+    margin-left: 20px;
 }
