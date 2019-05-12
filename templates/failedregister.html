@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row">
+    <h2 class="center-align">Registration Failed</h2>
+    <h4 class="center-align">You have entered a username that already exists</h4>
+    <h5 class="center-align">
+        <p>Please try to <a href="{{url_for('register')}}"><strong>Register</strong></a> again!</p>
+    </h5>
+</div>
+{% endblock %}

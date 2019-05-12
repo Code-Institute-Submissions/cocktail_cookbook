@@ -26,6 +26,9 @@ $(document).ready(function() {
             success: function(response) {
                 $('.collection').remove();
                 r = $.parseHTML(response);
+                if(r[0].childElementCount===0){
+                    r=$.parseHTML("<ul class='collection'><li class='collection-item'><p style='text-align:center'><strong>No recipes match those filters</strong></p></li></ul>");
+                }
                 $('#view').append(r);
             },
             error: function(error) {

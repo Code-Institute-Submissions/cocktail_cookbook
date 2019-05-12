@@ -54,7 +54,7 @@
                 <label for="difficulty">Cocktail Difficulty</label>
             </div>
             <div class="input-field col s12">
-                <i class="material-icons prefix fas fa-glass-cheers">people</i>
+                <i class="material-icons prefix fas fa-glass-cheers"></i>
                 <input type="hidden" id="occasions" name="occasions">
                 <select id="occasions-select" name="occasions-select" multiple required>
                     <option value="" disabled>Please select</option>
@@ -65,9 +65,7 @@
                 <label for="occasions">Suitable Occasions</label>
             </div>
             <div class="input-field col s12">
-                <i class="material-icons prefix">account_circle</i>
-                <input id="author" name="author" type="text" class="validate" required>
-                <label for="author">Your Name</label>
+                <input id="author" name="author" type="hidden" value="{{session.user}}">
             </div>
             <div class="row">
                 <br>

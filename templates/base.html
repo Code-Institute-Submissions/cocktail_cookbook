@@ -19,12 +19,20 @@
                 <a href="{{url_for('get_recipes')}}" class="brand-logo">Cocktail Cookbook</a>
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href=" {{ url_for('get_recipes') }} ">Home</a></li>
-                    <li><a href=" {{ url_for('add_recipe') }} ">Add Cocktail</a></li>
+                    {% if 'session' in request.cookies %}
+                    <li><a href="{{url_for('add_recipe')}}">Add Cocktail</a></li>
+                    <li><a href="{{url_for('logout')}}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('login')}}">Login</a></li>
+                    {% endif %}
                 </ul>
                 <ul class="sidenav" id="mobile-demo">
-                    <li><a href=" {{ url_for('get_recipes') }} ">Home</a></li>
-                    <li><a href=" {{ url_for('add_recipe') }} ">Add Cocktail</a></li>
+                    {% if 'session' in request.cookies %}
+                    <li><a href="{{url_for('add_recipe')}}">Add Cocktail</a></li>
+                    <li><a href="{{url_for('logout')}}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('login')}}">Login</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

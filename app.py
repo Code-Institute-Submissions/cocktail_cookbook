@@ -1,15 +1,16 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session, Blueprint
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
+from flask_bcrypt import bcrypt
 import json
 
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = 'cocktail_cookbook'
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")
-
 mongo = PyMongo(app)
+
 
 @app.route('/')
 @app.route('/get_recipes')
@@ -26,10 +27,10 @@ def get_recipes():
 def add_recipe():
     return render_template(
         'addrecipe.html',
-        strengths=mongo.db.strengths.find(),
-        occasions=mongo.db.occasions.find(),
-        bases=mongo.db.bases.find(),
-        difficulty=mongo.db.difficulty.find())
+        strengths = mongo.db.strengths.find(),
+        occasions = mongo.db.occasions.find(),
+        bases = mongo.db.bases.find(),
+        difficulty = mongo.db.difficulty.find())
 
 @app.route('/insert_recipe', methods=['POST'])
 def insert_recipe():
@@ -47,11 +48,11 @@ def edit_recipe(recipe_id):
     the_recipe = mongo.db.recipes.find_one({"_id":ObjectId(recipe_id)})
     return render_template(
         'editrecipe.html',
-        recipe=the_recipe,
-        strengths=mongo.db.strengths.find(),
-        occasions=mongo.db.occasions.find(),
-        bases=mongo.db.bases.find(),
-        difficulty=mongo.db.difficulty.find())
+        recipe = the_recipe,
+        strengths = mongo.db.strengths.find(),
+        occasions = mongo.db.occasions.find(),
+        bases = mongo.db.bases.find(),
+        difficulty = mongo.db.difficulty.find())
 
 @app.route('/view_recipe/<recipe_id>')
 def view_recipe(recipe_id):
@@ -84,7 +85,7 @@ def delete_recipe(recipe_id):
 
 @app.route('/filter_recipes',methods=['POST'])
 def filter_recipes():
-    d=request.form.to_dict()
+    d = request.form.to_dict()
     if d != {}:
         if d['base'] == '':
             del d['base']
@@ -96,14 +97,45 @@ def filter_recipes():
             del d['occasions']
     return render_template(
         'filtersortrecipes.html',
-        recipes=mongo.db.recipes.find(d),
-        bases=mongo.db.bases.find(),
-        strengths=mongo.db.strengths.find(),
-        difficulty=mongo.db.difficulty.find(),
-        occasions=mongo.db.occasions.find())
+        recipes = mongo.db.recipes.find(d),
+        bases = mongo.db.bases.find(),
+        strengths = mongo.db.strengths.find(),
+        difficulty = mongo.db.difficulty.find(),
+        occasions = mongo.db.occasions.find())
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if 'user' in session:
+        redirect(url_for('get_recipes'))
+    if request.method == 'POST':
+        users = mongo.db.users
+        login_user = users.find_one({'user' : request.form['user']})
+        if login_user:
+            if login_user['password'] == request.form['password']:
+                session['user'] = request.form['user']
+                return redirect(url_for('get_recipes'))
+        return render_template('failedlogin.html')
+    return render_template('login.html')
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        users = mongo.db.users
+        existing_user = users.find_one({'user' : request.form['user']})
+        if existing_user is None:
+            users.insert({'user': request.form['user'], 'password' : request.form['password']})
+            session['user'] = request.form['user']
+            return redirect(url_for('get_recipes'))
+        return render_template('failedregister.html')
+    return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('get_recipes'))
 
 if __name__ == '__main__':
+    app.secret_key = 'secret_key'
     app.run(host=os.environ.get('IP'),
             port=int(os.environ.get('PORT')),
             debug=True)

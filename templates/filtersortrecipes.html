@@ -1,6 +1,6 @@
 <ul class="collection">
     {% for r in recipes %}
-    <li data-base="{{r.base}}" class="collection-item avatar">
+    <li class="collection-item avatar">
       <img src="../static/images/{{ r.strength|lower() }}.svg" title="Strength: {{r.strength}}" class="strength">
       <span class="title">{% for str in r.name.split(" ") %}{{ str.capitalize() }} {% endfor %}</span>
       <p><span class="desc">{{ r.desc|truncate(150) }}</span><br>
