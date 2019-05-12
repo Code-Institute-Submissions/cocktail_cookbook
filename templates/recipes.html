@@ -1,36 +1,52 @@
 {% extends 'base.html' %} {% block content %}
 <div class="row">
-    <div class="input-field col s12 m6 l3">
+    <div class="input-field col s12 m6 l4">
         <select id="base" class="filter-class">
-            <option value="" selected>Filter on Base</option>
+            <option value="" selected>Base: No Filter</option>
             {% for b in bases %}
-            <option value="{{b.name}}">{{b.name}}</option>
+            <option value="{{b.name}}">Base: {{b.name}}</option>
             {% endfor %}
         </select>
     </div>
-    <div class="input-field col s12 m6 l3">
+    <div class="input-field col s12 m6 l4">
         <select id="diff" class="filter-class">
-            <option value="" selected>Filter on Difficulty</option>
+            <option value="" selected>Difficulty: No Filter</option>
             {% for d in difficulty %}
-            <option value="{{d.name}}">{{d.name}}</option>
+            <option value="{{d.name}}">Difficulty: {{d.name}}</option>
             {% endfor %}
         </select>
     </div>
-    <div class="input-field col s12 m6 l3">
+    <div class="input-field col s12 m6 l4">
         <select id="stre" class="filter-class">
-            <option value="" selected>Filter on Strength</option>
+            <option value="" selected>Strength: No Filter</option>
             {% for s in strengths %}
-            <option value="{{s.name}}">{{s.name}}</option>
+            <option value="{{s.name}}">Strength: {{s.name}}</option>
             {% endfor %}
         </select>
     </div>
-    <div class="input-field col s12 m6 l3">
+    <div class="input-field col s12 m6 l4">
         <select id="occa" class="filter-class">
-            <option value="" selected>Filter on Occasion</option>
+            <option value="" selected>Occasion: No Filter</option>
             {% for o in occasions %}
-            <option value="{{o.name}}">{{o.name}}</option>
+            <option value="{{o.name}}">Occasion: {{o.name}}</option>
             {% endfor %}
         </select>
+    </div>
+    <div class="input-field col s12 m6 l4">
+        <select id="sort" class="filter-class">
+            <option value="name,1" selected>Sort by: Name (A-Z)</option>
+            <option value="name,-1">Sort by: Name (Z-A)</option>
+            <option value="base,1">Sort by: Base</option>
+            <option value="strength,1">Sort by: Strength</option>
+            <option value="difficulty,1">Sort by: Difficulty</option>
+            <option value="occasion,1">Sort by: Occasion</option>
+            <option value="author,1">Sort by: Author</option>
+        </select>
+    </div>
+    <div class="input-field col s12 m6 l4">
+        <div class="select-wrapper">
+            <p>I found <span id="recqty">{{i}} recipes that match</span> those search criteria.</p>
+        </div>
     </div>
 </div>
 <div id="view"></div>
@@ -42,7 +58,8 @@
       <p><span class="desc">{{ r.desc|truncate(150) }}</span><br>
          Base: {{ r.base }}<br>
          Difficulty: {{ r.difficulty }}<br>
-         Good for: {% for occ in r.occasions %}{{ occ }}{% if r.occasions.index(occ) < r.occasions|length-1 %}, {% endif %}{% endfor %}
+         Good for: {% for occ in r.occasions %}{{ occ }}{% if r.occasions.index(occ) < r.occasions|length-1 %}, {% endif %}{% endfor %}<br>
+         Recipe posted by: <span class="author">{{ r.author }}</span>
       </p>
       <a href="{{url_for('view_recipe',recipe_id=r._id)}}" class="secondary-content" title="View recipe"><i class="material-icons view-recipe">remove_red_eye</i></a>
     </li>

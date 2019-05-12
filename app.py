@@ -15,13 +15,18 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/get_recipes')
 def get_recipes():
+    rs=mongo.db.recipes.find()
+    i=0
+    for r in rs:
+        i+=1
     return render_template(
         'recipes.html',
-        recipes=mongo.db.recipes.find(),
+        recipes=mongo.db.recipes.find().sort('name',1),
         bases=mongo.db.bases.find(),
         strengths=mongo.db.strengths.find(),
         difficulty=mongo.db.difficulty.find(),
-        occasions=mongo.db.occasions.find())
+        occasions=mongo.db.occasions.find(),
+        i=i)
 
 @app.route('/add_recipe')
 def add_recipe():
@@ -86,6 +91,9 @@ def delete_recipe(recipe_id):
 @app.route('/filter_recipes',methods=['POST'])
 def filter_recipes():
     d = request.form.to_dict()
+    s = d['sort']
+    s = s.split(',')
+    d.pop('sort')
     if d != {}:
         if d['base'] == '':
             del d['base']
@@ -97,7 +105,7 @@ def filter_recipes():
             del d['occasions']
     return render_template(
         'filtersortrecipes.html',
-        recipes = mongo.db.recipes.find(d),
+        recipes = mongo.db.recipes.find(d).sort(s[0],int(s[1])),
         bases = mongo.db.bases.find(),
         strengths = mongo.db.strengths.find(),
         difficulty = mongo.db.difficulty.find(),
