@@ -157,7 +157,7 @@ def logout():
     return redirect(url_for('get_recipes'))
 
 if __name__ == '__main__':
-    app.secret_key = 'secret_key'
+    app.secret_key = os.getenv('secret_key','SECRET'),
     app.run(host=os.environ.get('IP','0.0.0.0'),
             port=int(os.environ.get('PORT','8080')),
             debug=False)
