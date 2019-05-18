@@ -1,8 +1,7 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session, Blueprint
+from flask import Flask, render_template, redirect, request, url_for, session
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from flask_bcrypt import bcrypt
 import json
 
 app = Flask(__name__)
@@ -30,12 +29,15 @@ def get_recipes():
 
 @app.route('/add_recipe')
 def add_recipe():
-    return render_template(
-        'addrecipe.html',
-        strengths = mongo.db.strengths.find(),
-        occasions = mongo.db.occasions.find(),
-        bases = mongo.db.bases.find(),
-        difficulty = mongo.db.difficulty.find())
+    if 'user' in session:
+        return render_template(
+            'addrecipe.html',
+            strengths = mongo.db.strengths.find(),
+            occasions = mongo.db.occasions.find(),
+            bases = mongo.db.bases.find(),
+            difficulty = mongo.db.difficulty.find())
+    else:
+        return redirect(url_for('get_recipes'))
 
 @app.route('/insert_recipe', methods=['POST'])
 def insert_recipe():
@@ -43,21 +45,26 @@ def insert_recipe():
     recipe = request.form.to_dict()
     del recipe['occasions-select']
     del recipe['action']
-    occasions = recipe['occasions'].split(',')
-    recipe['occasions'] = occasions
+    recipe['occasions'] = recipe['occasions'].split(',')
     recipes.insert_one(recipe)
     return redirect(url_for('get_recipes'))
 
 @app.route('/edit_recipe/<recipe_id>')
 def edit_recipe(recipe_id):
     the_recipe = mongo.db.recipes.find_one({"_id":ObjectId(recipe_id)})
-    return render_template(
-        'editrecipe.html',
-        recipe = the_recipe,
-        strengths = mongo.db.strengths.find(),
-        occasions = mongo.db.occasions.find(),
-        bases = mongo.db.bases.find(),
-        difficulty = mongo.db.difficulty.find())
+    if 'user' in session:
+        if session['user'] == the_recipe['author']:
+            return render_template(
+                'editrecipe.html',
+                recipe = the_recipe,
+                strengths = mongo.db.strengths.find(),
+                occasions = mongo.db.occasions.find(),
+                bases = mongo.db.bases.find(),
+                difficulty = mongo.db.difficulty.find())
+        else:
+            return redirect(url_for('view_recipe',recipe_id=recipe_id))
+    else:
+        return redirect(url_for('view_recipe',recipe_id=recipe_id))
 
 @app.route('/view_recipe/<recipe_id>')
 def view_recipe(recipe_id):
@@ -85,8 +92,15 @@ def update_recipe(recipe_id):
 
 @app.route('/delete_recipe/<recipe_id>')
 def delete_recipe(recipe_id):
-    mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
-    return redirect(url_for('get_recipes'))
+    the_recipe = mongo.db.recipes.find_one({"_id":ObjectId(recipe_id)})
+    if 'user' in session:
+        if session['user'] == the_recipe['author']:
+            mongo.db.recipes.remove({'_id': ObjectId(recipe_id)})
+            return redirect(url_for('get_recipes'))
+        else:
+            return redirect(url_for('view_recipe',recipe_id=recipe_id))
+    else:
+        return redirect(url_for('view_recipe',recipe_id=recipe_id))
 
 @app.route('/filter_recipes',methods=['POST'])
 def filter_recipes():
@@ -114,7 +128,7 @@ def filter_recipes():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if 'user' in session:
-        redirect(url_for('get_recipes'))
+        return redirect(url_for('get_recipes'))
     if request.method == 'POST':
         users = mongo.db.users
         login_user = users.find_one({'user' : request.form['user']})
@@ -144,7 +158,7 @@ def logout():
 
 if __name__ == '__main__':
     app.secret_key = 'secret_key'
-    app.run(host=os.environ.get('IP'),
-            port=int(os.environ.get('PORT')),
-            debug=True)
+    app.run(host=os.environ.get('IP','0.0.0.0'),
+            port=int(os.environ.get('PORT','8080')),
+            debug=False)
 
