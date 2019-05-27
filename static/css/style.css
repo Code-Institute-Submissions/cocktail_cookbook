@@ -1,3 +1,4 @@
+/*----------- Pre-built css ------------*/
 .btn_small {
     height: 24px;
     width: 60px;
@@ -10,6 +11,7 @@
     margin-top: 5px;
 }
 
+/*----------- My css ------------*/
 img {
     max-width: 80px;
 }
