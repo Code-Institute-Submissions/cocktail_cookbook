@@ -56,10 +56,12 @@
                 });
                 $('#occasions')[0].value = occasions;
             };
-            mSelect();
-            $('.multiple-select-dropdown>li').click(function() {
+            if(window.location.href.indexOf("edit_recipe") > -1 || window.location.href.indexOf("add_recipe") > -1){
                 mSelect();
-            });
+                $('.multiple-select-dropdown>li').click(function() {
+                    mSelect();
+                });
+            }
         });
     </script>
 </body>
